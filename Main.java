@@ -1,112 +1,52 @@
+package Perfection;
+
 import java.util.Scanner;
-import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Athlete> athletes = new ArrayList<>();
-        ArrayList<TrainingPlan> trainingPlans = new ArrayList<>();
+        Scanner input = new Scanner(System.in);
 
-        //Initialize training plans
-        trainingPlans.add(new TrainingPlan("Beginner", 2, 25.00));
-        trainingPlans.add(new TrainingPlan("Intermediate", 3, 30.00));
-        trainingPlans.add(new TrainingPlan("Elite", 5, 35.00));
+        Athlete [] athletes = new Athlete[6]; // Create an array to store athlete objects
 
-        Scanner scanner = new Scanner((System.in));
+        int numAthletes = 0; // Keep track of the number of athletes added
 
-        //Initialize number of athletes
-        int numOfAthletes = 6;
-
-        //Input data for each athlete
-        for (int i = 1; i <= numOfAthletes; i++) {
-            System.out.println("Enter Athlete " + i + ":");
-            System.out.println("Name: ");
-
-            String name = scanner.nextLine();
-
-            System.out.print("Training Plan (Beginner, Intermediate, Elite): ");
-
-            String trainingPlan = scanner.nextLine();
-
-            TrainingPlan selectedTrainingPlan = null;
-
-            for (TrainingPlan plan : trainingPlans) {
-                if (plan.getName().equals(trainingPlan)) {
-                    selectedTrainingPlan = plan;
-                    break;
-                }
+/* Entries for 6 athletes*/
+        for (int i = 0; i < 6; i++) {
+            athletes[i] = new Athlete();
+            athletes[i].GetAthleteDetails();
+            athletes[i].DisplayAthleteDetails();
+            numAthletes++;
+/* allow user to add another athlete after 6*/
             }
-            if (selectedTrainingPlan == null) {
-                System.out.println("Invalid training plan, please enter a valid plan");
-                i++;
-                continue;
+        while (true) {
+            System.out.println("Do you want to add another athlete? (yes/no)");
+            String choice = input.nextLine().toLowerCase();
+            if (!choice.equals("yes")){
+                break;
             }
-            System.out.print("Current Weight (Kg): ");
-            double currentWeight = scanner.nextDouble();
-            scanner.nextLine();
-
-            System.out.println("Competition Weight Category: ");
-            String competitionWeightCategory = scanner.nextLine();
-
-            System.out.print("Number of Competitions Entered this Month: ");
-            int competitionsEntered = scanner.nextInt();
-
-            if (selectedTrainingPlan.getName().equals("Intermediate") && competitionsEntered <= 0) {
-                System.out.println("Intermediate athletes must enter at least one competition.");
-                i--;
-                continue;
-            } else if (selectedTrainingPlan.getName().equals("Elite") && competitionsEntered <= 0) {
-                System.out.println("Elite athletes must enter at least one competition.");
-                i--;
-                continue;
-            }
-            int privateCoachingHours = 0;
-            if (selectedTrainingPlan.getName().equals("Intermediate") || selectedTrainingPlan.getName().equals("Elite")) {
-                System.out.println("Number of hours of private coaching (max 5 hours/week");
-                privateCoachingHours = scanner.nextInt();
-                if (privateCoachingHours > 5) {
-                    System.out.println("Max hours exceeded");
-                    privateCoachingHours = 5;
-                }
-            }
-            athletes.add(new Athlete(name, trainingPlan, currentWeight, competitionWeightCategory,
-                    competitionsEntered, privateCoachingHours));
-        }
-        for (Athlete athlete : athletes) {
-            System.out.println("\nAthlete: " + athlete.getName());
-            System.out.println("Training plan: " + athlete.getTrainingPlan());
-
-            double trainingCost = athlete.getNumCompetitions() * 22.00;
-            double coachingCost = athlete.getHoursPrivateCoaching() * 9.00;
-            double totalCost = trainingCost + coachingCost;
-
-            System.out.println("Training and competition costs: $" + String.format("%.2f", trainingCost));
-            System.out.println("Private coaching cost: $" + String.format("%.2f", coachingCost));
-            System.out.println("Total cost for the month: $" + String.format("%.2f", totalCost));
-
-            String weightCategory = athlete.getCompetitionWeightCategory();
-            double upperWeightLimit = 0;
-
-            if (weightCategory.equals("Heavyweight")) {
-                upperWeightLimit = 1000;
-            } else if (weightCategory.equals("Light heavyweight")) {
-                upperWeightLimit = 100;
-            } else if (weightCategory.equals("Middleweight")) {
-                upperWeightLimit = 90;
-            } else if (weightCategory.equals("Light middleweight")) {
-                upperWeightLimit = 81;
-            } else if (weightCategory.equals("Lightweight")) {
-                upperWeightLimit = 73;
-            } else if (weightCategory.equals("Flyweight")) {
-                upperWeightLimit = 66;
-            }
-
-            if (athlete.getCurrentWeight() > upperWeightLimit) {
-                System.out.println("Weight exceeds the competition weight category");
+            if (numAthletes < athletes.length) {
+                athletes[numAthletes] = new Athlete();
+                athletes[numAthletes].GetAthleteDetails();
+                athletes[numAthletes].DisplayAthleteDetails();
+                numAthletes++;
             } else {
-                System.out.println("Weight is within the competition weight category.");
+                System.out.println("Maximum number of athletes reached.");
+                break;
             }
-
         }
-        scanner.close();
+// Display a summary of added athletes
+// Display in table
+        System.out.println("\nSummary of all Athletes:");
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-25s | %-20s | %-20s | %-15s | %-10s | %-15s |\n", "Name", "Training Plan", "Category", "Private Coaching", "Competitions", "Total Cost");
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
+        for (int i = 0; i < numAthletes; i++) {
+            Athlete athlete = athletes[i];
+            System.out.printf("| %-25s | %-20s | %-20s | $%-13.d | %-21d | %-15d |\n", athlete.getName(),
+                    athlete.getTrainingPlan(), athlete.getCompetitionWeightCategory(),
+                    athlete.getHoursPrivateCoaching(), athlete.getNumCompetitions(), athlete.getTotalCost());
+        }
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
+
     }
 }
