@@ -38,11 +38,12 @@ public class Main {
 // Display in table
         System.out.println("\nSummary of all Athletes:");
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf("| %-25s | %-20s | %-20s | %-15s | %-10s | %-15s |\n", "Name", "Training Plan", "Category", "Private Coaching", "Competitions", "Total Cost");
+        System.out.printf("| %-25s | %-20s | %-20s | %-15s | %-15s | %-10s |\n", "Name", "Training Plan", "Category",
+                "Private Coaching", "Competitions", "Total Cost");
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
         for (int i = 0; i < numAthletes; i++) {
             Athlete athlete = athletes[i];
-            System.out.printf("| %-25s | %-20s | %-20s | $%-13.d | %-21d | %-15d |\n", athlete.getName(),
+            System.out.printf("| %-25s | %-20s | %-20s | %-13d | %-15d | $%-9.2f |\n", athlete.getName(),
                     athlete.getTrainingPlan(), athlete.getCompetitionWeightCategory(),
                     athlete.getHoursPrivateCoaching(), athlete.getNumCompetitions(), athlete.getTotalCost());
         }
